@@ -1,0 +1,7 @@
+          # Testprogramm
+           komencu  adr-1
+ loko 1    skribu   E adr-2
+           legu     1 adr-2
+           finu 
+ loko 2    tkst "Hello, world!
+"

@@ -1,0 +1,18 @@
+# kopiu
+# al 100
+proc kop {} {
+global kopiert
+set teksto ""
+catch {set teksto [.t get sel.first sel.last]}
+ if {$teksto == ""} {.t insert insert $kopiert}
+ if {$teksto != ""} {set kopiert $teksto}
+}
+destroy .bb
+button .bb -text kop -command kop
+pack .bb -side right
+
+#    destroy .bb
+
+#    pack forget .bb
+
+

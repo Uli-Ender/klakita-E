@@ -1,0 +1,152 @@
+package require Tk
+global i k p palt  kopiert
+set kopiert "neu initialisiert!"
+set verz [pwd]
+# enigu aktualan dosieron, kie trovigxas klakita-E-arm!
+if {$verz == "/"}  {cd /sdcard/klakita-E-arm}
+#grafische Benutzeroberflaeche  schon vorhanden
+destroy .s
+destroy .t
+destroy .b1
+destroy .b2
+destroy .b3
+destroy .b4
+destroy .l
+
+scrollbar .s -command {.t yview}
+pack .s -side right -fill y
+text .t -wrap word -yscrollcommand {.s set} -height 5 -spacing1 5  -font {"DejaVu Sans Mono" 10}
+pack .t -expand yes -fill both
+button .b1 -text " F " -command programm-ausfuehren
+button .b2 -text "<" -command b2
+button .b3 -text ">" -command b3
+button .b4 -text " S " -command speichere-datei
+label .l -textvariable i
+pack .b1 .b2 .b3 .b4 -side left
+
+proc programm-ausfuehren {} {
+set teksto ""
+catch {set teksto [.t get sel.first sel.last]}
+if {$teksto == ""} {set teksto [.t get 0.0 end]}
+eval $teksto
+}
+proc b2 {} {
+global i k
+set k 0
+.l configure -bg White
+incr i -1
+if {$i < 0} {set i 0}
+.t delete 0.0 end
+wm title . "klakita E  - pa\u11do $i "
+lade-datei $i
+set i " $i "
+.b4 configure -state normal
+}
+proc b3 {} {
+global i k
+set k 1
+.l configure -bg Yellow
+incr i 
+wm title . "klakita E  - pa\u11do $i "
+.t delete 0.0 end
+lade-datei $i
+set i " $i "
+markiere 0.0 #' "PaleGreen1" ;#'
+markiere 0.0 #: "#ffa0a0"    ;#:
+markiere 0.0 #, "#80ffff"    ;#,
+markiere 0.0 #. "Yellow"     ;#.
+.b4 configure -state disabled
+}
+proc speichere-datei {} {
+global i p
+incr i 
+incr i -1
+set p($i) [.t get 0.0 end]
+catch {
+set file [open $i w+]
+puts $file $p($i)
+close $file
+}
+set i " $i "
+}
+#Datei laden 
+proc lade-datei {j} {
+global p k
+catch {
+set teksto $p($j)
+regsub -all {\r} $teksto {} teksto
+.t delete 0.0 end 
+.t insert end $teksto
+}
+catch {
+set file [open $j]
+set text [read $file]
+.t delete 0.0 end
+.t insert end $text
+close $file
+}
+}
+# Springe zu File N wenn die  Zahl N markiert wird  iru al datenaro N se nombro N estas markita 
+bind .t <ButtonRelease-1> {
+set x ""
+catch {set x [.t get sel.first sel.last]}
+catch {
+if [string is integer $x] { 
+incr x -1
+set i $x
+.b3 invoke
+return}
+if [string is double $x] {
+set x [expr int($x)]
+source $x
+return
+}}
+}
+# um Esperanto-Texte anzuzeigen por montri Esperanto-tekstojn
+proc markiere {pos sig kol} {
+global palt
+catch {set p1 [.t search $sig $pos-2chars]}
+set p2 -1.0
+catch {set p2 [.t search $sig $p1+1chars]}
+if {$p1 == 0.0} {
+set palt 0.0 
+return
+}
+if {$p2 == -1.0} {
+set palt 0.0
+return
+}
+.t tag configure $kol -background $kol
+set teksto [.t get $p1+2chars $p2]
+.t delete $p1 $p2+2chars
+regsub -all cx $teksto \u109 teksto
+regsub -all gx $teksto \u11d teksto
+regsub -all hx $teksto \u125 teksto
+regsub -all jx $teksto \u135 teksto
+regsub -all sx $teksto \u15d teksto
+regsub -all ux $teksto \u16d teksto
+regsub -all Cx $teksto \u108 teksto
+regsub -all Gx $teksto \u11c teksto
+regsub -all Hx $teksto \u124 teksto
+regsub -all Jx $teksto \u134 teksto
+regsub -all Sx $teksto \u15c teksto
+regsub -all Ux $teksto \u16c teksto
+.t insert $p1 $teksto $kol
+set palt $p2
+markiere $p2 $sig $kol
+}
+
+# Initialisierung 
+file copy -force 97 98
+source 1000
+source 180
+if {[file exists /data/data/tk.tcl.wish/files] == 0} {file copy -force 96 98}
+
+set i 99
+set k 0
+set palt 0.0
+.b3 invoke
+ after 1000 {.top1.b3 invoke}
+
+
+

@@ -1,0 +1,43 @@
+# ascii-kodoj
+           komencu adr-3 
+# ascii-kodoj
+ loko 1    tkst "ascii-kodoj "
+# nova linio
+ loko 2    tkst "
+   "
+ loko 5    skribu  B  adr-1 
+           re  
+ loko 4    skribu  1  adr-2 
+           re  
+ loko 3    a=      20
+           a->     adr-6
+           a=      30
+           a->     adr-9
+           irs     adr-4 
+           irs     adr-5 
+           irs     adr-4 
+           irs     adr-4
+ loko 7    a=  
+ loko 6    20
+           skribu  1 adr-6 
+           a<-     adr-6 
+           a+      1
+           a->     adr-6 
+           a-    
+ loko 9    30
+           ir0     adr-8
+           a<-     adr-6 
+           a-      7F  
+           irt     adr-7 
+           irs     adr-4 
+           irs     adr-4 
+           legu    1 adr-6 
+           finu 
+ loko 8    irs     adr-4 
+           a<-     adr-9 
+           a+      10  
+           a->     adr-9 
+           iru     adr-7 
+
+
+

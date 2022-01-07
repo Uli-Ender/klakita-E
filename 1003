@@ -1,0 +1,83 @@
+         # Listo de anstataŭigoj Linux & ARM-7
+
+a=      {ldr  r0 0
+         b    e  0 
+         n-ro nombro }
+
+a<-     {ldr  r1 0
+         b    e  0
+         n-ro nombro
+         ldr1 r0 0 }
+
+a->     {ldr  r1 0
+         b    e  0
+         n-ro nombro
+         str1 r0 0 }   
+
+a+      {ldr  r1 0
+         b    e  0
+         n-ro nombro
+         add  r0 r1 } 
+
+acc-    {ldr  r1 0
+         b    e  0
+         n-ro nombro
+         sub  r0 r1 }
+
+inv-c   {b    2  4
+         acc- 0
+         b    e  3
+         a+   0}
+
+a-      {acc- nombro 
+         inv-c}
+         
+iru     {n-ro e51ff004
+         n-ro nombro }
+
+ir0     {b    1    1
+         n-ro e51ff004
+         n-ro nombro  }
+
+irt     {b    3    1
+         n-ro e51ff004
+         n-ro nombro }
+
+irs     {push
+         n-ro e51ff004
+         n-ro nombro }
+
+re      {pop
+         n-ro e281f004} 
+
+komencu {header nombro } 
+
+skribu  {mov  r0  1
+         ldr  r2 4
+         ldr  r1 4
+         b    e  1
+         n-ro nombro
+         n-ro nombro
+         mov  r7 4
+         swi  0 }
+
+legu    {mov  r0  0
+         ldr  r2 4 
+         ldr  r1 4
+         b    e  1
+         n-ro nombro
+         n-ro nombro
+         mov  r7 3
+         swi  0 }
+
+finu    {mov  r0  0
+         mov  r7  1
+         swi  0 }
+
+r0      { 00 }
+r1      { 01 }
+r2      { 02 }
+r7      { 07 }
+r13     { 0d }
+r14     { 0e }
+r15     { 0f }

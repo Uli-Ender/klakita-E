@@ -1,0 +1,247 @@
+#    100      programo por skribi la fontotekston per klakoj
+global n marke wort wei klav i
+# Hauptprogramm
+set wort ""
+set wei 150
+set klav "K"
+# set marke 0.0
+set n 0
+destroy .top1
+destroy .top2
+set font {"DejaVu Sans Mono"  6}
+toplevel .top1
+scrollbar .top1.s -width 50 -command {.top1.t yview}
+pack .top1.s -side right -fill y
+text .top1.t -wrap none -yscrollcommand {.top1.s set} -height 5 -spacing1 5  -font $font -undo 1
+pack .top1.t -expand yes -fill both
+toplevel .top2
+wm title .top2 "instrukcioj 1002"
+scrollbar .top2.s -width 50 -command {.top2.t yview}
+pack .top2.s -side right -fill y
+text .top2.t -wrap none -yscrollcommand {.top2.s set} -height 5 -spacing1 5  -font $font -undo 1
+pack .top2.t -expand yes -fill both
+.top1.t tag configure rot -background "#ffa0a0"
+.top1.t tag configure blau -background "#80ffff"
+.top1.t tag configure gelb -background yellow
+.top1.t tag configure gruen -background PaleGreen
+catch {
+set h [open 1001 r]
+while {[eof $h] == 0} {
+set zeile [gets $h]
+.top1.t insert end $zeile\n
+.top1.t edit separator
+} 
+.top1.t delete "end- 2lines" end
+close $h
+}
+set h [open 1002 r]
+set text [read $h]
+.top2.t insert end $text
+close $h
+
+button .top1.b -text -- -command {
+global schalte
+set schalte 0
+.top1.t edit undo
+Textfaerben
+ }
+button .top1.b1 -text ++ -command {
+.top1.t edit redo
+Textfaerben
+}
+
+button .top1.b2 -text K -command {XXX}
+button .top1.b3 -text ^ -command {
+speichern
+set i 99
+if {[winfo height .] > [winfo width .]} {incr i}
+.b3 invoke
+raise .
+}
+pack .top1.b3 .top1.b2 .top1.b .top1.b1 -side left -expand yes -fill both
+
+button .top2.b -text >> -command {YYY}
+button .top2.b2 -text << -command {ZZZ}
+pack .top2.b .top2.b2 -side left
+destroy .b5
+button .b5 -text ^ -command {lower .}
+pack .b5 -side right
+
+set marke [.top1.t index end]
+
+### bindings
+bind .top1.t <ButtonPress-1> {
+global n marke wort
+set lind [.top1.t index @%x,%y]
+set anf [string first "." $lind]
+incr anf
+set pos [string range $lind $anf end]
+set w [.top1.t get "$lind wordstart" "$lind wordend"]
+if {$pos > 10 && $wort == "nombro"} {.top1.t insert $marke "nombro"
+set wort ""}
+if {$pos > 10 && $wort == "adreso"} {.top1.t insert $marke "adreso"
+set wort ""}
+if {$pos > 10 && $wort == "adresoH"} {.top1.t insert $marke "adresoH"
+set wort ""}
+if {$pos > 10 && $wort == "adresoL"} {.top1.t insert $marke "adresoL"
+set wort ""}
+## wenn nombro dann "" Text zaehlen
+if {$wort == "nombro"} {
+set eins [.top1.t search "tkst" "$lind linestart" "$lind lineend"]
+set str ""
+catch {set str [.top1.t get $eins end]
+set str [lindex $str 1]}
+## Zeichenzahl in Bytezahl umwandeln
+set str [encoding convertto utf-8 $str]
+set laenge [string length $str]
+## dec->hex
+set laenge [format %%X $laenge]
+.top1.t insert $marke $laenge
+#############
+} 
+##### wenn adreso dann loko adr machen
+if {$wort == "adreso" || $wort == "adresoH" || $wort == "adresoL"} {
+set text [.top1.t get "$lind linestart" "$lind lineend"]
+set eins [lindex $text 0]
+if {$eins == "loko"} {set m [lindex $text 1]}
+if {$eins != "loko"} {
+incr n
+set m $n
+}
+.top1.t delete "$lind linestart" "$lind linestart+10chars"
+update                 
+after 50                   
+set spacoj "   "
+if {$m > 9} {set spacoj "  "}
+if {$m > 99} {set spacoj " "}
+.top1.t insert "$lind linestart" " loko $m$spacoj"                         
+after 100        
+if {$wort == "adreso"} {.top1.t insert $marke "adr-$m"}
+if {$wort == "adresoH"} {.top1.t insert $marke "adrH$m"}
+if {$wort == "adresoL"} {.top1.t insert $marke "adrL$m"}
+
+# .top1.t edit separator
+}
+set marke [.top1.t index "$lind wordstart"]
+set wort $w
+if {$wort == "nombro" || $wort == "adreso" || $wort == "adresoH" || $wort == "adresoL" || $wort == "teksto"} {
+.top1.t tag add gelb "$lind wordstart" "$lind wordend"
+after 100 {.top1.t delete "$lind wordstart" "$lind wordend"}
+}
+Textfaerben
+                    }
+
+bind .top2.t <ButtonPress-1> {
+global marke wort
+set wort ""
+set lind [.top2.t index @%x,%y]
+set zeile [.top2.t get "$lind linestart" "$lind lineend"]
+set anf [string first "." $marke] 
+set zei "[string range $marke 0 $anf]0"
+incr anf
+set pos [string range $marke $anf end]
+if {$pos < 10} {.top1.t insert $zei "           $zeile\n"}
+if {$pos > 10} {.top1.t insert $marke $zeile}
+set marke [.top1.t index insert]
+Textfaerben
+.top1.t edit separator
+.top1.t see insert
+  }
+
+### procs ###
+proc speichern {} {
+set teksto [.top1.t get 0.0 end]
+set h [open 1001 w+]
+puts -nonewline $h $teksto
+close $h
+}
+
+proc Tastatur {} {
+global klav
+if {$klav == "N"} {catch {sdltk textinput off}}
+after 20 Tastatur
+}
+Tastatur
+
+proc textSearch {string} {
+global n
+    if {[string length $string] < 2} {
+	return
+    }
+    set cur 1.0
+    while 1 {
+	set cur [.top1.t search -nocase -count length $string $cur end]
+	if {$cur == ""} {
+	    break
+	}
+if {$string == "teksto"} {
+        .top1.t tag add gruen $cur "$cur + $length char"
+                         }
+if {$string == "adreso"} {
+	.top1.t tag add rot $cur "$cur + $length char"
+                         }
+if {$string == "nombro"} {
+	.top1.t tag add blau $cur "$cur + $length char"
+                         }
+if {$string == "loko"} {incr n}
+	set cur [.top1.t index "$cur + $length char"]
+    }
+}
+
+proc Textfaerben {} {
+global n
+set n 0
+textSearch nombro
+textSearch adreso
+textSearch loko
+textSearch teksto
+wm title .top1 "fontoteksto 1001 $n lokoj"
+}
+Textfaerben
+
+proc XXX {} {
+global klav
+if {$klav == "K"} {
+raise .top2
+.top1.b2 configure -text "N"
+set klav "N"
+return
+}
+# lower .top2
+.top1.b2 configure -text "K"
+set klav "K"
+}
+
+proc YYY {} {
+global wei
+set hei [winfo height .top2]
+incr wei 10
+wm geometry .top2 ${wei}x${hei}
+}
+
+proc ZZZ {} {
+global wei
+set hei [winfo height .top2]
+incr wei -10
+wm geometry .top2 ${wei}x${hei}
+}
+.top1.t see end
+
+proc zeit {} {
+set hoehe [winfo screenheight .]
+source 98
+after 1000 zeit
+}
+zeit
+
+
+set i 99
+.b3 invoke
+
+
+
+
+
+
+
+

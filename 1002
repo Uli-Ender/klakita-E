@@ -1,0 +1,43 @@
+# prototipoj de instrukcioj
+open    adreso nombro
+read    adreso nombro adreso
+write   adreso nombro adreso
+close   adreso
+lseek   adreso nombro nombro
+fsync   adreso
+########instrukcioj########
+a=      nombro 
+a->     adreso 
+a<-     adreso 
+a+      nombro
+a-      nombro
+iru     adreso 
+ir0     adreso 
+irt     adreso 
+irs     adreso 
+re  
+komencu adreso 
+legu    nombro  adreso 
+skribu  nombro  adreso 
+finu 
+spaco   nombro
+n-ro    nombro
+tkst "teksto"
+########nombroj###########
+0     
+1 
+10  
+7F  
+FFFF 
+r0
+r1
+r2
+r7
+r13
+r14
+r15
+#######bazaj instrukcioj########
+# header absoluta adreso
+
+
+

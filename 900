@@ -1,0 +1,23 @@
+# alles zusammen
+file delete 1004
+file delete 1005
+file delete 1006
+file delete 1007
+file delete 1008
+file delete 1009
+source 901
+source 904
+source 905
+source 906
+# plenumu kodon kaj montru rezulton
+source 907
+set i 1008
+.b3 invoke
+
+
+
+
+
+
+
+

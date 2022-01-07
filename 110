@@ -1,0 +1,8 @@
+#  saluton mondo
+file copy -force 1022 1020
+file copy -force 1022 1001
+ set h [open 1020 r]
+ set text [read $h]
+ .top1.t delete 0.0 end
+ .top1.t insert end $text
+ close $h

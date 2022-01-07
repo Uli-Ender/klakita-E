@@ -1,0 +1,20 @@
+set h [open 1007 r]
+set hh [open 1008 w+]
+fconfigure $hh -encoding binary -translation binary
+while {[eof $h] != 1} {
+set zeile [gets $h]
+set ll [llength $zeile]
+set n 0
+while {$n < $ll} {
+set ind [lindex $zeile $n]
+incr n
+if {$ind == "#"} {break}
+if {[string length $ind] == 2} {
+.t insert end "$ind "
+puts -nonewline $hh [format %c 0x$ind]
+}
+}
+}
+close $hh
+close $h
+# exec chmod 777 1008

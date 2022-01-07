@@ -1,0 +1,28 @@
+# anstatauxigoj gxis flago == gleich
+global flag nrlok
+set flag ""
+set mmm 0
+file copy -force 1001 1004
+set h [open 1004 r]
+set text [read $h]
+set nrlok [regsub -all loko $text {} ignore]
+close $h
+while {$flag != "gleich"} {
+# while {$mmm != 1} {}
+source 903
+source 902
+### .t insert end "Runde $mmm\n"
+incr mmm
+if {$mmm > 9} stop
+}
+
+
+
+
+
+
+
+
+
+
+

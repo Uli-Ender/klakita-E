@@ -1,0 +1,103 @@
+# pasxo 1 anstatauxigoj de a= , DDRB etc for la komentolinioj
+#  .  :  Ü  *  Ä  ~  <  >  |
+global flag nrlok
+proc neulok {text} {
+global nrlok
+set l 0
+while {$l > -1} {
+set l [string first loko $text $l]
+# wenn wort nicht loko dann weiter
+if {$l == -1} {continue}
+set tx [string range $text $l end]
+set tx [lindex $tx 1]
+incr nrlok
+# wenn tx keine Zahl weiter
+if {[string is integer $tx] == 0} {set tx "malnombro" }
+set zahl [regsub -all "loko $tx" $text "loko qq$nrlok" text]
+set zahl [regsub -all "adr-$tx" $text "adr-qq$nrlok" text]
+set zahl [regsub -all "adrL$tx" $text "adrLqq$nrlok" text] 
+set zahl [regsub -all "adrH$tx" $text "adrHqq$nrlok" text]
+# .t insert end "l $l  tx $tx\n"
+incr l 9
+}
+set zahl [regsub -all qq $text {} text]
+# .t insert end "### nombro de lokoj $nrlok\n"
+# .t insert end $text\n
+return $text
+}
+
+set h [open 1004 r]
+set hh [open 1005 w+]
+set hhh [open 1003 r]
+set quelltext [read $h]
+set qlae [llength $quelltext]
+set makros [read $hhh]
+set n -1
+while {$n < $qlae} {
+incr n
+set wort [lindex $quelltext $n]
+if {[string first "#" $wort] == 0} {
+set e [string first #  $quelltext]
+set e [string first \n $quelltext $e]
+set quelltext [string range $quelltext $e end]
+set qlae [llength $quelltext]
+set n -1
+set wort ""
+}
+if {$wort == "tkst"} {
+incr n
+set wort [lindex $quelltext $n]
+puts $hh "tkst \"$wort\" "
+continue
+}
+set wort2 "
+$wort "
+set gefunden [string first $wort2 $makros]
+if {[string length $wort] < 1} {set gefunden -1}
+if {$gefunden == -1} {
+# .t insert end "wort $wort\n"
+puts $hh $wort}
+if {$gefunden != -1} {
+set wort [lindex $quelltext $n]
+set rest [string range $makros $gefunden end]
+set wort3 [lindex $rest 1]
+set wort3 [neulok $wort3]
+while {[string first nombro $wort3] > -1} {
+incr n
+set para ""
+set para [lindex $quelltext $n]
+set para1 "
+$para "
+### para1 gefunden
+set gef [string first $para1 $rest]
+if {$gef > 0} {
+set sss [string range $rest $gef end]
+set ggg [lindex $sss 1]
+### ersetzen
+set g 0
+set gg [llength $ggg]
+while {$g < $gg} {
+set gggg [regsub nombro $wort3 [lindex $ggg $g] wort3]
+incr g
+                 }
+}
+if {$para == "loko"} {
+incr n
+set para "loko [lindex $quelltext $n]"
+incr n
+set para "$para [lindex $quelltext $n]"
+}
+regsub nombro $wort3 $para wort3
+}
+### wort3
+### .t insert end "wort3 $wort3\n"
+puts $hh $wort3
+}
+}
+
+# .t see end
+close $h
+close $hh
+close $hhh
+
+

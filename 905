@@ -1,0 +1,206 @@
+# pasxo 3 - transformo al kodoj
+# assemble
+global ein aus org
+set ein [open 1006 r]
+set aus [open 1007 w+]
+
+proc make-hex {z} {return [string range "0000[format %X $z]" end-1 end]}
+
+proc 4bytes {nombro} {
+set n "00000000$nombro"
+set b1 [string range $n end-1 end]
+set b2 [string range $n end-3 end-2]
+set b3 [string range $n end-5 end-4]
+set b4 [string range $n end-7 end-6]
+set x "$b1 $b2 $b3 $b4"
+return $x
+}
+
+#                              ldr e5 9f r-0 radr 
+proc ldr    {reg radr} {
+global org
+set reg [string range $reg end end]
+# relative Sprungadresse berechnen
+# set x [expr (0x$radr) - $org - 8]
+# set x "00000000[dec2hex $x]"
+set x $radr
+set x "00000000$x"
+set y [string range $x end-2 end-2]
+set x [string range $x end-1 end]
+return "$x ${reg}$y 9f e5 "
+}
+
+#                              ldr e5 91 r-0 radr 
+proc ldr1   {reg radr} {
+set reg [string range $reg end end]
+# relative Sprungadresse berechnen
+set x $radr
+set x "00000000$x"
+set y [string range $x end-2 end-2]
+set x [string range $x end-1 end]
+return "$x ${reg}$y 91 e5 "
+}
+
+#                              str e5 81 r-0 radr 
+proc str1   {reg radr} {
+set reg [string range $reg end end]
+# relative Sprungadresse berechnen
+set x $radr
+set x "00000000$x"
+set y [string range $x end-2 end-2]
+set x [string range $x end-1 end]
+return "$x ${reg}$y 81 e5 "
+}
+
+#                              stm e9 0d 20 00 
+proc push   {} {
+return "00 80 2d e9 "
+}
+
+#                              ldm e9 9d 20 00 
+proc pop    {} {
+return "02 00 bd e8 "
+}
+
+#                              b   cond-a radr 
+# cond: e == immer  == null  == carry
+proc b     {cond radr} {
+set cond [string range $cond end end]
+set x $radr
+set x "00000000$x"
+set x2 [string range $x end-5 end-4]
+set x1 [string range $x end-3 end-2]
+set x [string range $x end-1 end]
+return "$x $x1 $x2 ${cond}a "
+}
+
+#                              swi ef 00 00 num 
+proc swi    {num} {
+set num [string range $num end end]
+return "0$num 00 00 ef "
+}
+
+#                              mov e3 a0 reg-0 0-num 
+proc mov    {reg num} {
+set reg [string range $reg end end]
+set num "0$num"
+set num [string range $num end-1 end]
+return "$num ${reg}0 a0 e3 "
+}
+
+#                              add e0 80 reg-reg 0-reg2 
+proc add    {reg reg2} {
+set reg [string range $reg end end]
+set num "0$reg2"
+set num [string range $reg2 end-1 end]
+return "$reg2 ${reg}${reg} 90 e0 "
+}
+
+#                              sub e0 40 reg-reg 0-reg2 
+proc sub    {reg reg2} {
+set reg [string range $reg end end]
+set num "0$reg2"
+set num [string range $reg2 end-1 end]
+return "$reg2 ${reg}${reg} 50 e0 "
+}
+
+proc header {nombro} {
+set x1  "7F 45 4C 46 01 01 01 00"
+set x2  "00 45 73 70 65 72 6F 20"
+set x3  "02 00"
+set x4  "28 00"
+set x5  "01 00 00 00"
+set x6  [4bytes $nombro]
+set x7  "34 00 00 00"
+set x8  "00 00 00 00"
+set x9  "00 00 00 00"
+set x10 "34 00"
+set x11 "20 00"
+set x12 "01 00"
+set x13 "00 00"
+set x14 "00 00"
+set x15 "00 00"
+set x16 "01 00 00 00"
+set x17 "00 00 00 00"
+set x18 "00 80 00 00"
+set x19 "00 80 00 00"
+set x20 "00 00 01 00"
+set x21 "00 00 01 00"
+set x22 "07 00 00 00"
+set x23 "00 10 00 00"
+set x "$x1 $x2 
+$x3 $x4 $x5 $x6 
+$x7 $x8 
+$x9 $x10 $x11 $x12 $x13 $x14 $x15 
+$x16 $x17 $x18 
+$x19 $x20 
+$x21 $x22 
+$x23"
+return $x
+}
+
+#                              n-ro
+proc n-ro {nombro} {
+set x [4bytes $nombro]
+return $x  
+                   }
+
+#                              spaco
+proc spaco {nombro} {
+set nombro "0x$nombro"
+set n 1
+set x "00"
+while {$n < $nombro} {
+set x "$x 00"
+incr n
+                     }
+return $x
+                    }
+
+set org 32768
+# 32768 == 0x8000
+set inhalt [read $ein]
+set laenge [llength $inhalt]
+set n 0
+puts -nonewline $aus "[dec2hex $org]  "
+while  {$n < $laenge} {
+set instr [lindex $inhalt $n]
+
+if {$instr == "tkst"} {
+incr n
+set teksto [lindex $inhalt $n]
+set laeng [string length $teksto]
+.t insert end "$laeng  *${teksto}*\n" 
+
+.t insert end $laenge
+set ln 0
+while {$ln < $laeng} {
+set cc [string index $teksto $ln]
+binary scan $cc H2 val
+puts -nonewline $aus "$val "
+# .t insert end "val $val "
+incr ln               }
+set lll [string length $teksto]
+# .t insert end "$lll\n"
+incr org $lll
+set hex [format %x $org]
+puts -nonewline $aus "
+$hex  "
+# .t insert end "hex $hex $text xxx\n"
+}
+set lae [increment $instr]
+set lae [llength $lae]
+set m [expr ($n + $lae -1)]
+set zeile [lrange $inhalt $n $m]
+incr n
+if {$lae != "0"} {.t insert end "$zeile\n"
+set instr [eval $zeile]
+set lll [llength $instr]
+incr org $lll
+set hex [format %X $org]
+puts -nonewline $aus "$instr	# $zeile
+$hex  "
+}
+}
+close $ein
+close $aus

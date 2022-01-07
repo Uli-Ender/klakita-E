@@ -1,0 +1,20 @@
+# Neffos Smartphone
+global wei
+set h [winfo screenheight .]
+incr h -40
+set w [winfo screenwidth .]
+incr w -20
+set wei2 $w
+incr wei2 -$wei
+incr wei2 -20
+set wei3 $wei
+incr wei3 20
+wm geometry .top2 ${wei}x${h}+0+0
+wm geometry .top1 ${wei2}x${h}+${wei3}+0
+wm geometry . ${w}x${h}
+.t      configure -font {"DejaVu Sans Mono" 6}
+.top1.t configure -font {"DejaVu Sans Mono" 6}
+.top2.t configure -font {"DejaVu Sans Mono" 6}
+
+
+

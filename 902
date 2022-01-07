@@ -1,0 +1,21 @@
+#  kompari 1004 kaj 1005
+global flag
+set h [open 1004 r]
+set hh [open 1005 r]
+set n 0
+set flag gleich
+while {[eof $h] == 0} {
+incr n
+set zeile1 [gets $h]
+set zeile2 [gets $hh]
+if {$zeile1 != $zeile2} {
+set flag ungleich
+}
+}
+close $h
+close $hh
+file copy -force 1005 1004
+# global flag ; .t insert end $flag
+
+
+

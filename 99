@@ -1,0 +1,183 @@
+
+KLARIGOJ pri 'klakita E' 
+========================
+'klakita E' estis programita de Uli Ender el Munkeno (Germanio) 
+per la programlingvo Tcl/Tk.
+'klakita E' estas kolekto de skriptoj en formo de 'elektronika libro' kiuj ebligas la konstruon de programoj per simpla klakado/palpado sur instrukciojn aŭ
+tekstoliniojn.
+
+ La 'skript'-libro por Tcl/Tk
+ ----------------------------
+ La numero de la aktuala paĝo montriĝas supre sur la fenestrokadro
+ F   ==  - faru, kio estas skribita sur la paĝo
+           kiam estas eraro en la teksto, eraromesaĝo aperas
+         - se parto de la teksto estas markita, rulas nur la markita teksto
+         - kiam numero estas markita, la programo saltas al tiu paĝo (ekz. 5 )
+         - kiam numero kun punkto estas markita, rulas la teksto kun tio numero
+ <   ==    iru unu paĝon malantaŭen, sed ne malpli ol al paĝo 0
+           vi povas editi la paĝon (S-butono aktivas)
+           vi povas skribi supersignoj per la x-metodo  
+           cx gx hx sx ux Cx Gx Hx Sx Ux  -->  ĉ ĝ ĥ ŝ ŭ Ĉ Ĝ Ĥ Ŝ Ŭ
+ >   ==    iru unu paĝon antaŭen (eventualaj koloroj montriĝas)
+           vi ne povas stori la tekston (S-butono malaktivita)
+ S   ==    storu la paĝon (funkcias nur, kiam S-butono estas aktiva!)
+ kop ==    a) kopiu markitan tekston
+           b) rekopiu kopiitan tekston kiam nenio estas markita
+ ^   ==    iru al la editilo de fontotekstoj
+
+La editilo de klakita E
+-----------------------
+La editilo de fontotekstoj konsistas el fenestro kun la elekteblaj instrukcioj kaj
+la fenestro kun la fontoteksto
+
+fenestro de instrukcioj
+-----------------------
+>>		plilarĝigas la instrukcio-fenestron
+<<              malgrandiĝas la instrukcio-fenestron
+instrukcioj & parametroj:
+a=       nombro	       enigas sekvan nombron en la a-registron
+a<-      adreso        enigas la enhavon de memorloko adreso en la a-registron
+a->      adreso        storas a-registron al memorloko adreso
+a+       nombro        adicias sekvan nombron al a-registro 
+a-       nombro        subtrahas sekvan nombron de a-registro
+iru      adreso        daŭrigas la programon je memorloko adreso
+ir0      adreso        daŭrigas la programon je memorloko adreso, kiam antaŭa
+                       kalkulo estis nulo
+irt      adreso        daŭrigas la programon je memorloko adreso, kiam antaŭa
+                       kalkulo kaŭzis transigon
+irs      adreso        programo saltas al subprogramo je la memorloko adreso
+re		       programo reiras de subprogramo
+komencu	 adreso	       la programo startas je la memorloko adreso
+skribu	 nombro adreso skribas nombro	literojn de bufro je la memorloko adreso 
+                       al la ekrano
+legu     nombro adreso legas nombro literojn de la klavaro al bufro je la
+                       memorloko adreso       
+finu                   finiĝas la programon
+tkst    "teksto"       kreas tekston kun la teksto "teksto"
+n-ro     nombro        kreas lokon por unu nombro 
+spaco    nombro        kreas spacon de nombro da bajtoj
+adreso          eine symbolische Adresse
+nombro          eine symbolische Zahl
+teksto          ein Platzhalter fuer einen Text
+
+fontokeksta fenestro:
+---------------------
+^	==	storu fontotekston kaj reiru al la enhavolisto (paĝo 100)
+K / N	==	Klavaro en la ekrano aktivas aŭ Ne aktivas
+++	==	iru paŝon antaŭen en la historio de la kreado de la fontoteksto
+--      ==      iru paŝon malantaŭen en la historio de la kreado de la fontoteksto
+
+eta ekzemplo, kiel la programado per 'klakado' funkcias
+========================================================
+
+ instrukcia fenestro                           fontoteksta fenstro
+ -------------------                           -------------------
+...                               |
+komencu adreso                    |
+finu                              |
+...                               |
+
+paŝo 1 klako sur linio kun la vorto komenco
+...                               |           komencu #:adreso#:
+komencu adreso                    |
+finu                              |
+...                               |
+
+paŝo 2 klako sur linio kun la vorto finu
+...                               |           komencu #:adreso#:
+komencu adreso                    |           finu
+finu                              |
+...                               |
+
+paŝo 3 klako sur la ruĝa vorto adreso
+...                               |           komencu
+komencu nombro                    |           finu
+finu                              |
+...                               |
+la ruĝa vorto malaperas
+
+paŝo 4 klako sur komenco de la linio kun la vorto finu
+...                               |           komencu adr-1 
+komencu nombro                    | loko 1    finu
+finu                              |
+...                               |
+La adreso adr-1 estas nun konektita kun la memorloko loko 1
+
+paŝo 5  premo sur la butono ^
+programo estas storita kaj ni eniras al la enhavo-tabelon
+
+paŝo 6  ni markigas la nombron sekvata de punkto  #,900.#,
+La programo estas asemblita.
+
+paĝo 1007 montras la heksadecimalajn nombrojn de la programo:
+
+8000  7F 45 4C 46 01 01 01 00 00 45 73 70 65 72 6F 20 
+02 00 28 00 01 00 00 00 54 80 00 00 
+34 00 00 00 00 00 00 00 
+00 00 00 00 34 00 20 00 01 00 00 00 00 00 00 00 
+01 00 00 00 00 00 00 00 00 80 00 00 
+00 80 00 00 00 00 01 00 
+00 00 01 00 07 00 00 00 
+00 10 00 00	# header 8054
+8054  00 00 a0 e3 	# mov 00 0
+8058  01 70 a0 e3 	# mov 07 1
+805C  00 00 00 ef 	# swi 0
+8060  
+
+vi povas malkomenti kelkajn liniojn de paĝo 907 por ke la programo rulu!
+vidu tie!
+
+fundamentaj instrukcioj por arm-7-procesilo
+-------------------------------------------
+header {startadreso}      programokapo en ELF-formato
+swi    {num}              softvara interrompo      
+ldr    {reg  radr}        enigu enhavon de (pc + radr) al registro reg
+                          pc == program counter == programmontrilo 
+ldr1   {reg  radr}        enigu enhavon de (r1 + radr) al registro reg
+str1   {reg  radr}        storu registron reg al (r1 + radr) 
+b      {cond radr}        branĉigu laŭkondiĉe
+add    {reg  reg2}        adiciu:    reg = reg + reg2
+sub    {reg  reg2}        substrahu: reg = reg - reg2
+push                      metu sur stakon
+pop                       demetu de stako
+mov    {reg  num}         enigu numeron al registro 
+
+priskribo de la simpla komputila modelo de programlingvo E
+===========================================================
+komputilo konsistas de memoro, a-registro, nul-flago, transigo-flago
+programomontrilo kaj stakomontrilo
+instrukcioj prilaboras nombrojn. depende de la tipo de procesilo nombroj havas
+la saman grandecon 
+     16 bitoj == 2 bajtoj por 16-bitaj komputiloj ekz. 8086
+     32 bitoj == 4 bajtoj por 32-bitaj komputiloj ekz. arm-7
+     64 bitoj == 8 bajtoj por 64-bitaj komputiloj ekz. x86-64
+
+ La ekzemplo montras 16-bitan komputilon (8086) post prilaborado de
+              instrukcio  a<= 123
+ La heksadecimala kodo de la instrukcio estas A1 23 01 kaj
+ troviĝas en la memoro je la adreso 100
+ Tio instrukcio transportas kopion de la enhavo de la adreso 123 
+ en la a-registron.
+ Notu, ke la vico de bajtoj estas renversita en 8086! 
+                                                        transigo-bito
+       +-------+     adreso    enhavo de memoro    +---+   +---+
+       | ABCD  |<-+  --------|------------------   | 0 |   | 0 |
+       +-------+  |      0100| A1                  +---+   +---+
+      a-registro  |      0101| 23                nul-bito
+                  |      0102| 01                       
+                  |      0103| 45 <------+       program-montrilo 
+                  |        .....         |         +--------+
+                  +----- 0123| CD        +---------|  0103  |
+                         0124| AB                  +--------+
+                         0125| FF        
+                           .....         
+                         FFFE| 00 <------+       stako-montrilo
+                         FFFF| 00        |         +--------+
+                                         +-------->|  FFFE  |
+                                                   +--------+
+
+
+
+
+
+

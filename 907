@@ -1,0 +1,13 @@
+# startu kodon kaj montru rezulton en dosiero 1009
+
+## kiam temas pri raspberry pi
+## exec chmod 777 1008
+## set xxx [exec ./1008 > 1009 &]
+## exec kill $xxx
+## exec x-terminal-emulator -e ./1008
+## lower .
+
+# kiam temas pri android
+# file copy -force 1008 /data/data/tk.tcl.wish/files/1008
+# exec chmod 777 /data/data/tk.tcl.wish/files/1008
+# exec /data/data/tk.tcl.wish/files/1008 > 1009

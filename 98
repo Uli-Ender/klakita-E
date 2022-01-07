@@ -1,0 +1,27 @@
+# grandeco de literoj kaj fenestroj por raspberry pi
+global wei
+set h [winfo screenheight .]
+incr h -80
+set w [winfo screenwidth .]
+incr w -0
+set wei2 $w
+incr wei2 -$wei
+incr wei2 -0
+set wei3 $wei
+incr wei3 0
+wm geometry .top2 ${wei}x${h}+0+45
+wm geometry .top1 ${wei2}x${h}+${wei3}+45
+wm geometry . ${w}x${h}+0+45
+.t      configure -font {"DejaVu Sans Mono" 20}
+.top1.t configure -font {"DejaVu Sans Mono" 20}
+.top2.t configure -font {"DejaVu Sans Mono" 20}
+proc zeit {} {
+set hoehe [winfo screenheight .]
+source 98
+after 300 zeit
+}
+
+
+
+
+

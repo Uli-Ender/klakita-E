@@ -1,0 +1,110 @@
+# pasxo 2 optimigoj se eblas poste kalkulado de la adresoj
+# optimigoj unue
+set zeile ""
+proc dec2hex {n} {set x [format %X $n]}
+proc increment {t} {
+set x {}
+if {$t == "header"}      {set x   {84 0}}
+if {$t == "swi"}         {set x   {0 4}}
+if {$t == "ldr"}         {set x   {0 0 4}}
+if {$t == "ldr1"}        {set x   {0 0 4}}
+if {$t == "str1"}        {set x   {0 0 4}}
+if {$t == "b"}           {set x   {0 0 4}}
+if {$t == "add"}         {set x   {0 0 4}}
+if {$t == "sub"}         {set x   {0 0 4}}
+if {$t == "push"}        {set x   {4}}
+if {$t == "pop"}         {set x   {4}}
+if {$t == "mov"}         {set x   {0 0 4}} 
+if {$t == "n-ro"}        {set x   {0 4}}
+return $x   }
+
+set org 32768
+# org == 0x8000
+
+# eltrovu lokojn kaj indeksoj
+set h [open 1004 r]
+set hh [open 1005 w+]
+set vv "-1"
+set n 0
+set zeile ""
+set inhalt [read $h]
+set ll [llength $inhalt]
+# puts -nonewline $hh [dec2hex $org]
+
+while {$n < $ll} {
+set instr [lindex $inhalt $n]
+# .t insert end $instr\n
+
+if {$instr == "loko"} {
+incr n
+set z [lindex $inhalt $n]
+set lokoj($z) $org
+# .t insert end "index $z speicherstelle [dec2hex $org]\n"
+incr n
+set instr [lindex $inhalt $n]
+continue
+}
+
+if {$instr == "spaco"} {
+incr n
+set iii [lindex $inhalt $n]
+puts $hh " spaco $iii"
+incr org "0x$iii"
+incr n
+continue
+                       }
+
+if {$instr == "tkst"} {
+incr n
+set teksto [lindex $inhalt $n]
+set laenge [string bytelength $teksto]
+puts -nonewline $hh "[dec2hex $org] tkst "
+puts $hh \"$teksto\"
+incr org $laenge
+incr n
+continue
+}
+
+set v [increment $instr]
+if {$v == ""} {
+puts -nonewline $hh " $instr"
+}
+if {$v != ""} {
+set vv $v
+puts -nonewline $hh "[dec2hex $org] $instr"
+}
+if {$vv != ""} {
+set offset [lindex $vv 0]
+incr org $offset
+set vv [lrange $vv 1 end]
+}
+if {$vv == ""} {puts $hh ""}
+# .t insert end "instr $instr  v $v vv $vv offset $offset\n"
+incr n
+# .t insert end $n\n
+}
+close $h
+close $hh
+
+set h [open 1005 r]
+set hh [open 1006 w+]
+set n 0
+while {[eof $h] == 0} {
+incr n
+set zeile [gets $h]
+# erste Zeichenkette loeschen, wenn Speicherstelle
+set m [string first "8" $zeile]
+if {$m == 0} { set zeile [string range $zeile 5 end]}
+set ad [string first "adr" $zeile]
+if {$ad == -1} {puts $hh "$zeile"}
+if {$ad > -1} {
+set zeile [string replace $zeile $ad+3 $ad+3 " "]
+set zeile2 [string range $zeile $ad end]
+set z [lindex $zeile2 1]
+set zz [string range $zeile 0 $ad-2]
+puts $hh "$zz [dec2hex $lokoj($z)]"
+}
+}
+close $h
+close $hh
+
