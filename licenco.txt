@@ -1,3 +1,6 @@
+"klakita E" is released under the same license terms as Tcl/Tk!
+See the following terms!
+
 The following terms apply to the all versions of the core Tcl/Tk releases, the Tcl/Tk browser plug-in version 2.0, and TclBlend and Jacl version 1.0. Please note that the TclPro tools are under a different license agreement. This agreement is part of the standard Tcl/Tk distribution as the file named "license.terms".
 
 Tcl/Tk License Terms
