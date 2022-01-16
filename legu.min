@@ -1,0 +1,25 @@
+Ĝenerala informo:
+====================
+Klakita-E estas kolekto de skriptoj programitaj per Tcl/Tk por generi binaran kodon por variaj komputilaj sistemoj simple klakante sur instrukciaj vortoj, butonoj kaj tekstaj linioj. Skribado de tekstoj estas minima.
+Ĝi estis programita de Uli Ender, Munkeno, Germanio (kontakto: uli.ender-@-esperanto.de) kaj uzas Esperanton.
+
+Klakita-E estas malferma softvaro. Ĝi havas la saman licencon kiel Tcl/Tk (vidu licenco.txt).
+
+
+Kiel ruligi "Klakita E":
+-----------------------
+1) Por uzi "Klakita-E" vi bezonas Tcl/Tk-interpretilon sur via komputilo.
+   (Vidu la ret-paĝon tcl.tk por ricevi dokumentadon kaj ligoj por elŝuti Tcl/Tk.)
+2) Kopiu ĉiujn projektajn dosierojn kaj storu ilin en aktujo, kie vi havas legado/skribado-permeson.
+   (ekz.:  /home/klakita-E (Linukso) /storage/emulated/0/klakita-E (Androido) )
+3) Malfermu konzolon en tiu ĉi aktujo kaj startu "Klakita-E" per "wish 0"
+   Poste aperos la komenca ekrano kun enhavo-tabelo!
+
+Historio:
+--------
+
+2022-01-16      README.md , licenco.txt ŝanĝita ;  legu.min aldonita
+
+2022-01-07	Starto de la projekto: https://github.com/Uli-Ender/klakita-E
+                kodo generata: momente nur por ARMv7
+
