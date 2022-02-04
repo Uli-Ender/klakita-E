@@ -20,8 +20,9 @@ Historio:
 
 2022-02-04      diversaj korektoj en la dosieroj 904, 905, 906, 1000, 1002 kaj 1003
               - instrukcio jmp aldonita
-              - spaco nun kreas spacojn gxis adresoj divideblaj per 4
+              - spaco nun kreas spacojn ĝis adresoj divideblaj per 4
               - kunmetitaj instrukcioj povas havi plurajn tekstojn
+              - kodo generata validas ankaŭ por ARMv6 kiel en Raspberry Pi B+ (2014)
 
 2022-01-16      README.md , licenco.txt ŝanĝita ;  legu.min aldonita
 
