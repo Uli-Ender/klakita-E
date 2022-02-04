@@ -1,11 +1,11 @@
-# prototipoj de instrukcioj
+# alvojoj de la linuksa mastruma sistemo
 open    adreso nombro
 read    adreso nombro adreso
 write   adreso nombro adreso
 close   adreso
 lseek   adreso nombro nombro
 fsync   adreso
-########instrukcioj########
+######## instrukcioj de E ########
 a=      nombro 
 a->     adreso 
 a<-     adreso 
@@ -23,11 +23,13 @@ finu
 spaco   nombro
 n-ro    nombro
 tkst "teksto"
-########nombroj###########
+######## kelkaj nombroj ###########
 0     
 1 
 10  
 7F  
+99
+100
 FFFF 
 r0
 r1
@@ -36,8 +38,17 @@ r7
 r13
 r14
 r15
-#######bazaj instrukcioj########
-# header absoluta adreso
-
-
-
+####### bazaj instrukcioj de ARMM-procesiloj ########
+4bytes  nombro
+ldr     reg offset
+ldr1    reg offset
+str1    reg offset
+push
+pop
+b       cond radr
+jmp     cond adreso
+swi     nombro
+mov     reg num
+add     reg reg2
+sub     reg reg2
+header  adreso
