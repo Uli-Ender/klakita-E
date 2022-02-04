@@ -19,7 +19,12 @@ How to run "Klakita E":
 
 History:
 --------
-
+2022-02-04      changed files 904, 905, 906, 1000, 1002, 1003, legu.min and README.md
+              - instruction jmp added
+              - spaco creates spaces till addresses divizable by 4
+              - makro parameters can contain several texts
+              - code generated is also valid for ARMv6 as in Raspberry Pi B+ (2014)
+              
 2022-01-16      README.md , licenco.txt changed ;  legu.min added
 
 2022-01-07	Start of project https://github.com/Uli-Ender/klakita-E
