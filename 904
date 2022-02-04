@@ -10,6 +10,7 @@ if {$t == "ldr"}         {set x   {0 0 4}}
 if {$t == "ldr1"}        {set x   {0 0 4}}
 if {$t == "str1"}        {set x   {0 0 4}}
 if {$t == "b"}           {set x   {0 0 4}}
+if {$t == "jmp"}         {set x   {0 0 4}}
 if {$t == "add"}         {set x   {0 0 4}}
 if {$t == "sub"}         {set x   {0 0 4}}
 if {$t == "push"}        {set x   {4}}
@@ -47,8 +48,12 @@ continue
 
 if {$instr == "spaco"} {
 incr n
+incr org -4
 set iii [lindex $inhalt $n]
-puts $hh " spaco $iii"
+# wenn nicht durch 4 teilbar, mache 4-Byte-Alinement
+ set align [expr 4-(int(fmod($iii,4)))]
+if {$align != 4} {incr iii $align}
+puts $hh " spaco [dec2hex $iii]"
 incr org "0x$iii"
 incr n
 continue
@@ -92,9 +97,6 @@ set n 0
 while {[eof $h] == 0} {
 incr n
 set zeile [gets $h]
-# erste Zeichenkette loeschen, wenn Speicherstelle
-set m [string first "8" $zeile]
-if {$m == 0} { set zeile [string range $zeile 5 end]}
 set ad [string first "adr" $zeile]
 if {$ad == -1} {puts $hh "$zeile"}
 if {$ad > -1} {
