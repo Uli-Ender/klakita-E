@@ -17,13 +17,13 @@ return $x
 }
 
 #                              ldr e5 9f r-0 radr 
-proc ldr    {reg radr} {
+proc ldr    {reg offset} {
 global org
 set reg [string range $reg end end]
 # relative Sprungadresse berechnen
 # set x [expr (0x$radr) - $org - 8]
 # set x "00000000[dec2hex $x]"
-set x $radr
+set x $offset
 set x "00000000$x"
 set y [string range $x end-2 end-2]
 set x [string range $x end-1 end]
@@ -31,10 +31,10 @@ return "$x ${reg}$y 9f e5 "
 }
 
 #                              ldr e5 91 r-0 radr 
-proc ldr1   {reg radr} {
+proc ldr1   {reg offset} {
 set reg [string range $reg end end]
 # relative Sprungadresse berechnen
-set x $radr
+set x $offset
 set x "00000000$x"
 set y [string range $x end-2 end-2]
 set x [string range $x end-1 end]
@@ -42,22 +42,24 @@ return "$x ${reg}$y 91 e5 "
 }
 
 #                              str e5 81 r-0 radr 
-proc str1   {reg radr} {
+proc str1   {reg offset} {
 set reg [string range $reg end end]
 # relative Sprungadresse berechnen
-set x $radr
+set x $offset
 set x "00000000$x"
 set y [string range $x end-2 end-2]
 set x [string range $x end-1 end]
 return "$x ${reg}$y 81 e5 "
 }
 
-#                              stm e9 0d 20 00 
+#                              stm e9 2d 80 00 
+# push ==  sp=sp-4 ; pc --> sp
 proc push   {} {
 return "00 80 2d e9 "
 }
 
-#                              ldm e9 9d 20 00 
+#                              ldm e9 bd 00 02 
+# pop ==   sp --> r1 ; sp=sp+4
 proc pop    {} {
 return "02 00 bd e8 "
 }
@@ -72,6 +74,21 @@ set x2 [string range $x end-5 end-4]
 set x1 [string range $x end-3 end-2]
 set x [string range $x end-1 end]
 return "$x $x1 $x2 ${cond}a "
+}
+
+# jmp  - an Adresse adr im Abstand bis +- 32 M springen
+proc jmp     {cond abs} {
+global org
+set cond [string range $cond end end]
+set y  0x$abs
+incr y -8
+incr y -$org
+set y [expr int($y/4)]
+set x [make-hex $y]
+set x2 [string range $x end-5 end-4]
+set x1 [string range $x end-3 end-2]
+set x [string range $x end-1 end]
+return "$x $x1 $x2 EA "
 }
 
 #                              swi ef 00 00 num 
@@ -145,18 +162,6 @@ set x [4bytes $nombro]
 return $x  
                    }
 
-#                              spaco
-proc spaco {nombro} {
-set nombro "0x$nombro"
-set n 1
-set x "00"
-while {$n < $nombro} {
-set x "$x 00"
-incr n
-                     }
-return $x
-                    }
-
 set org 32768
 # 32768 == 0x8000
 set inhalt [read $ein]
@@ -166,12 +171,30 @@ puts -nonewline $aus "[dec2hex $org]  "
 while  {$n < $laenge} {
 set instr [lindex $inhalt $n]
 
+if {$instr == "spaco"} {
+incr n
+set nombro [lindex $inhalt $n]
+set nombro "0x$nombro"
+set zahl 1
+set x "00"
+# wenn nicht durch 4 teilbar, mache 4-Byte-Alinement
+ set align [expr 4-(int(fmod($nombro,4)))]
+if {$align != 4} {incr nombro $align}
+while {$zahl < $nombro} {
+set x "$x 00"
+incr zahl
+} 
+incr org $nombro
+puts -nonewline $aus "$x # spaco $nombro
+[dec2hex $org] "
+incr n
+}
+
 if {$instr == "tkst"} {
 incr n
 set teksto [lindex $inhalt $n]
 set laeng [string length $teksto]
 .t insert end "$laeng  *${teksto}*\n" 
-
 .t insert end $laenge
 set ln 0
 while {$ln < $laeng} {
@@ -188,6 +211,7 @@ puts -nonewline $aus "
 $hex  "
 # .t insert end "hex $hex $text xxx\n"
 }
+
 set lae [increment $instr]
 set lae [llength $lae]
 set m [expr ($n + $lae -1)]
