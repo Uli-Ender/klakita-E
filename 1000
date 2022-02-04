@@ -77,8 +77,8 @@ set anf [string first "." $lind]
 incr anf
 set pos [string range $lind $anf end]
 set w [.top1.t get "$lind wordstart" "$lind wordend"]
-if {$pos > 10 && $wort == "nombro"} {.top1.t insert $marke "nombro"
-set wort ""}
+if {$pos > 10 && $wort == "nombro"} {.top1.t insert $marke ""
+set wort "nombro"}
 if {$pos > 10 && $wort == "adreso"} {.top1.t insert $marke "adreso"
 set wort ""}
 if {$pos > 10 && $wort == "adresoH"} {.top1.t insert $marke "adresoH"
@@ -87,10 +87,10 @@ if {$pos > 10 && $wort == "adresoL"} {.top1.t insert $marke "adresoL"
 set wort ""}
 ## wenn nombro dann "" Text zaehlen
 if {$wort == "nombro"} {
-set eins [.top1.t search "tkst" "$lind linestart" "$lind lineend"]
+set eins [.top1.t search "\0x22" $lind "$lind lineend"]
 set str ""
 catch {set str [.top1.t get $eins end]
-set str [lindex $str 1]}
+set str [lindex $str 0]}
 ## Zeichenzahl in Bytezahl umwandeln
 set str [encoding convertto utf-8 $str]
 set laenge [string length $str]
