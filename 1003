@@ -32,23 +32,19 @@ inv-c   {b    2  4
 a-      {acc- nombro 
          inv-c}
          
-iru     {n-ro e51ff004
+iru     {jmp e aldono-1 }
+
+ir0     {jmp 0 aldono-1  }
+
+irt     {jmp 2 aldono-1 }         
+
+irs     {push 
+         n-ro e51ff004       
          n-ro nombro }
-
-ir0     {b    1    1
-         n-ro e51ff004
-         n-ro nombro  }
-
-irt     {b    3    1
-         n-ro e51ff004
-         n-ro nombro }
-
-irs     {push
-         n-ro e51ff004
-         n-ro nombro }
-
+#  E51FF004 signifas:  nombro --> PC 
 re      {pop
-         n-ro e281f004} 
+         n-ro e281f004}
+#  E281F004 signifas: r1+4 --> PC !
 
 komencu {header nombro } 
 
@@ -72,6 +68,49 @@ legu    {mov  r0  0
 
 finu    {mov  r0  0
          mov  r7  1
+         swi  0 }
+        
+write   {a<-  aldono-1
+         ldr  r1 4
+         ldr  r2 4
+         b    e  1
+         n-ro aldono-2
+         n-ro aldono-3
+         mov  r7 4
+         swi  0 }
+
+read    {a<-  aldono-1
+         ldr  r1 4 
+         ldr  r2 4
+         b    e  1
+         n-ro aldono-2
+         n-ro aldono-3
+         mov  r7 3
+         swi  0 }
+
+close   {a<-  aldono-1
+         mov  r7 6
+         swi  0 }
+
+lseek   {a<-  aldono-1
+         ldr  r1 4 
+         ldr  r2 4
+         b    e  1
+         n-ro aldono-2
+         n-ro aldono-3
+         mov  r7 13
+         swi  0 }
+
+fsync   {a<-  aldono-1
+         mov  r7 76
+         swi  0 }
+
+nanosleep {ldr  r0 4 
+         ldr  r1 4
+         b    e  1
+         n-ro aldono-1
+         n-ro aldono-2
+         mov  r7 a2
          swi  0 }
 
 r0      { 00 }
