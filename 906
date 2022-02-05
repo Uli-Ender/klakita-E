@@ -3,7 +3,6 @@ set hh [open 1008 w+]
 fconfigure $hh -encoding binary -translation binary
 while {[eof $h] != 1} {
 set zeile [gets $h]
-set zeile "$zeile"
 set ll [llength $zeile]
 set n 0
 while {$n < $ll} {
