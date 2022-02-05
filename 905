@@ -208,7 +208,7 @@ set lll [string length $teksto]
 incr org $lll
 set hex [format %x $org]
 puts -nonewline $aus "
-$hex  "
+-$hex-  "
 # .t insert end "hex $hex $text xxx\n"
 }
 
@@ -223,7 +223,7 @@ set lll [llength $instr]
 incr org $lll
 set hex [format %X $org]
 puts -nonewline $aus "$instr	# $zeile
-$hex  "
+-$hex-  "
 }
 }
 close $ein
