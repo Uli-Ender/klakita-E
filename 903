@@ -12,7 +12,7 @@ set tx [string range $text $l end]
 set tx [lindex $tx 1]
 incr nrlok
 # wenn tx keine Zahl weiter
-if {[string is integer $tx] == 0} {set tx "malnombro" }
+if {[string is integer $tx] == 0} {set tx "malaldono" }
 set zahl [regsub -all "loko $tx" $text "loko qq$nrlok" text]
 set zahl [regsub -all "adr-$tx" $text "adr-qq$nrlok" text]
 set zahl [regsub -all "adrL$tx" $text "adrLqq$nrlok" text] 
@@ -21,7 +21,7 @@ set zahl [regsub -all "adrH$tx" $text "adrHqq$nrlok" text]
 incr l 9
 }
 set zahl [regsub -all qq $text {} text]
-# .t insert end "### nombro de lokoj $nrlok\n"
+# .t insert end "### aldono de lokoj $nrlok\n"
 # .t insert end $text\n
 return $text
 }
@@ -31,11 +31,14 @@ set hh [open 1005 w+]
 set hhh [open 1003 r]
 set quelltext [read $h]
 set qlae [llength $quelltext]
+# makros ist der Inhalt von File 1003 mit den Makros
 set makros [read $hhh]
 set n -1
-while {$n < $qlae} {
+
+while {$n < $qlae}                                      {
 incr n
 set wort [lindex $quelltext $n]
+# wenn Kommentarzeichen bis Zeilenende überspringen und am Anfang der nächsten Zeile weitermachen
 if {[string first "#" $wort] == 0} {
 set e [string first #  $quelltext]
 set e [string first \n $quelltext $e]
@@ -43,57 +46,52 @@ set quelltext [string range $quelltext $e end]
 set qlae [llength $quelltext]
 set n -1
 set wort ""
-}
-if {$wort == "tkst"} {
-incr n
-set wort [lindex $quelltext $n]
-puts $hh "tkst \"$wort\" "
-continue
-}
+                                   }
+ if {$wort == "tkst"} {
+ incr n
+ set wort [lindex $quelltext $n]
+ puts $hh "tkst \"$wort\" "
+ continue
+                                       }
 set wort2 "
 $wort "
 set gefunden [string first $wort2 $makros]
+# wenn wort kein makro dann weiter 
 if {[string length $wort] < 1} {set gefunden -1}
 if {$gefunden == -1} {
 # .t insert end "wort $wort\n"
-puts $hh $wort}
-if {$gefunden != -1} {
+puts $hh $wort       }
+# wort ein makrowort dann Argumente im Makro einfügen
+if {$gefunden != -1}                           {
 set wort [lindex $quelltext $n]
 set rest [string range $makros $gefunden end]
-set wort3 [lindex $rest 1]
-set wort3 [neulok $wort3]
-while {[string first nombro $wort3] > -1} {
+set makro [lindex $rest 1]
+set makro [neulok $makro]
+
+set pm 0
+### solange aldono noch im Makro
+while {[string first aldono $makro] > -1}   {
 incr n
+incr pm
 set para ""
 set para [lindex $quelltext $n]
 set para1 "
 $para "
-### para1 gefunden
-set gef [string first $para1 $rest]
-if {$gef > 0} {
-set sss [string range $rest $gef end]
-set ggg [lindex $sss 1]
-### ersetzen
-set g 0
-set gg [llength $ggg]
-while {$g < $gg} {
-set gggg [regsub nombro $wort3 [lindex $ggg $g] wort3]
-incr g
-                 }
-}
+
 if {$para == "loko"} {
 incr n
 set para "loko [lindex $quelltext $n]"
 incr n
 set para "$para [lindex $quelltext $n]"
-}
-regsub nombro $wort3 $para wort3
-}
-### wort3
-### .t insert end "wort3 $wort3\n"
-puts $hh $wort3
-}
-}
+                     }
+regsub -all aldono-$pm $makro $para makro
+                                             }
+
+### makro
+### .t insert end "makro $makro\n"
+puts $hh $makro
+                                                   }
+                                                       }
 
 # .t see end
 close $h
