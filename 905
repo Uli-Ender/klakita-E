@@ -88,7 +88,7 @@ set x [make-hex $y]
 set x2 [string range $x end-5 end-4]
 set x1 [string range $x end-3 end-2]
 set x [string range $x end-1 end]
-return "$x $x1 $x2 EA "
+return "$x $x1 $x2 ${cond}a "
 }
 
 #                              swi ef 00 00 num 
@@ -194,8 +194,8 @@ if {$instr == "tkst"} {
 incr n
 set teksto [lindex $inhalt $n]
 set laeng [string length $teksto]
-.t insert end "$laeng  *${teksto}*\n" 
-.t insert end $laenge
+# .t insert end "$laeng  *${teksto}*\n" 
+# .t insert end $laenge
 set ln 0
 while {$ln < $laeng} {
 set cc [string index $teksto $ln]
@@ -217,7 +217,8 @@ set lae [llength $lae]
 set m [expr ($n + $lae -1)]
 set zeile [lrange $inhalt $n $m]
 incr n
-if {$lae != "0"} {.t insert end "$zeile\n"
+if {$lae != "0"} {
+# .t insert end "$zeile\n"
 set instr [eval $zeile]
 set lll [llength $instr]
 incr org $lll
