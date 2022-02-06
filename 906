@@ -10,7 +10,7 @@ set ind [lindex $zeile $n]
 incr n
 if {$ind == "#"} {break}
 if {[string length $ind] == 2} {
-.t insert end "$ind "
+# .t insert end "$ind "
 puts -nonewline $hh [format %c 0x$ind]
 }
 }
