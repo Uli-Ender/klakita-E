@@ -4,7 +4,7 @@ global ein aus org
 set ein [open 1006 r]
 set aus [open 1007 w+]
 
-proc make-hex {z} {return [string range "0000[format %X $z]" end-1 end]}
+proc make-hex {z} {return [string range "0000[format %X $z]" 0 end]}
 
 proc 4bytes {nombro} {
 set n "00000000$nombro"
