@@ -2,26 +2,26 @@
 
 a=      {ldr  r0 0
          b    e  0 
-         n-ro nombro }
+         n-ro aldono-1 }
 
 a<-     {ldr  r1 0
          b    e  0
-         n-ro nombro
+         n-ro aldono-1
          ldr1 r0 0 }
 
 a->     {ldr  r1 0
          b    e  0
-         n-ro nombro
+         n-ro aldono-1
          str1 r0 0 }   
 
 a+      {ldr  r1 0
          b    e  0
-         n-ro nombro
+         n-ro aldono-1
          add  r0 r1 } 
 
 acc-    {ldr  r1 0
          b    e  0
-         n-ro nombro
+         n-ro aldono-1
          sub  r0 r1 }
 
 inv-c   {b    2  4
@@ -29,7 +29,7 @@ inv-c   {b    2  4
          b    e  3
          a+   0}
 
-a-      {acc- nombro 
+a-      {acc- aldono-1 
          inv-c}
          
 iru     {jmp e aldono-1 }
@@ -40,20 +40,20 @@ irt     {jmp 2 aldono-1 }
 
 irs     {push 
          n-ro e51ff004       
-         n-ro nombro }
+         n-ro aldono-1 }
 #  E51FF004 signifas:  nombro --> PC 
 re      {pop
          n-ro e281f004}
 #  E281F004 signifas: r1+4 --> PC !
 
-komencu {header nombro } 
+komencu {header aldono-1 } 
 
 skribu  {mov  r0  1
          ldr  r2 4
          ldr  r1 4
          b    e  1
-         n-ro nombro
-         n-ro nombro
+         n-ro aldono-2
+         n-ro aldono-1
          mov  r7 4
          swi  0 }
 
@@ -61,8 +61,8 @@ legu    {mov  r0  0
          ldr  r2 4 
          ldr  r1 4
          b    e  1
-         n-ro nombro
-         n-ro nombro
+         n-ro aldono-2
+         n-ro aldono-1
          mov  r7 3
          swi  0 }
 
