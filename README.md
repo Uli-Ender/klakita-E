@@ -19,6 +19,8 @@ How to run "Klakita E":
 
 History:
 --------
+2022-02-06      files 900, 903, 905, 906 and 1003 corrected
+
 2022-02-05      files 905 and 906 corrected
 
 2022-02-04      changed files 904, 905, 906, 1000, 1002, 1003, legu.min and README.md
