@@ -12,7 +12,7 @@ source 906
 # plenumu kodon kaj montru rezulton
 source 907
 set i 1008
-.b3 invoke
+catch {.b3 invoke}
 
 
 
