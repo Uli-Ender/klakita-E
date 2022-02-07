@@ -3,7 +3,7 @@ global i k p palt  kopiert
 set kopiert "neu initialisiert!"
 set verz [pwd]
 # enigu aktualan dosieron, kie trovigxas klakita-E-arm!
-if {$verz == "/"}  {cd /sdcard/klakita-E-arm}
+if {$verz == "/"}  {cd /sdcard/klakita-E-main}
 #grafische Benutzeroberflaeche  schon vorhanden
 destroy .s
 destroy .t
